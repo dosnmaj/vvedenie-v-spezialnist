@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ── Figma-exact Wabi-Sabi palette ── */
+  --stone:     #A8B3B4;   /* main bg */
+  --fog:       #C5CDD0;   /* lighter stone */
+  --concrete:  #D9D9D9;   /* gray placeholder blocks */
+  --parchment: #F0EBE3;   /* warm near-white */
+  --terra:     #9C4C39;   /* terracotta — main accent */
+  --bark:      #2B120D;   /* darkest — buttons, dark text */
+  --mud:       #483D35;   /* body text */
+  --ash:       #6B7678;   /* muted / label text */
+  --black:     #000000;   /* large headings on gray blocks */
+  --white:     #F5F2EE;   /* near-white for reversed sections */
+
+  /* Typography */
+  --font-display: 'Syne', 'Space Grotesk', sans-serif;
+  --font-body:    'Jost', 'Syne', sans-serif;
+  --font-ui:      'Syne', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--stone);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--stone);
+  color: var(--bark);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--concrete); }
+::-webkit-scrollbar-thumb { background: var(--terra); border-radius: 2px; }
+
+/* selection */
+::selection { background: var(--terra); color: var(--white); }
+
+/* ── Video backgrounds ── */
+.video-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* ── Nav link ── */
+.nav-link {
+  position: relative;
+  transition: color 200ms ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--terra);
+  transition: width 250ms ease;
+}
+.nav-link:hover::after { width: 100%; }
+.nav-link:hover { color: var(--terra); }
+
+/* ── Work card hover ── */
+.work-card { position: relative; overflow: hidden; cursor: pointer; }
+.work-card img { transition: transform 600ms cubic-bezier(0.25,0.46,0.45,0.94); }
+.work-card:hover img { transform: scale(1.04); }
+.work-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(43,18,13,0.88) 0%, rgba(43,18,13,0) 60%);
+  opacity: 0; transition: opacity 300ms ease;
+}
+.work-card:hover .work-card-overlay { opacity: 1; }
+.work-card-info {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem;
+  transform: translateY(10px); opacity: 0; transition: all 300ms ease;
+}
+.work-card:hover .work-card-info { opacity: 1; transform: translateY(0); }
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Marquee ── */
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { display: flex; animation: marquee 24s linear infinite; width: max-content; }
+
+/* ── Focus states ── */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 3px;
+}
+
+/* ── Wabi-Sabi grain overlay (very subtle on light bg) ── */
+.grain-overlay {
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  width: 100%; height: 100%; opacity: 0.028; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* ── Vignette ── */
+.vignette-overlay {
+  position: fixed; inset: 0; z-index: 9998; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(43,18,13,0.18) 100%);
+}
+
+/* ── Paper texture ── */
+.paper-texture { position: relative; }
+.paper-texture::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23paper)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+}
+
+/* ── Ink divider ── */
+.ink-divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(to right, transparent, var(--terra), transparent);
+}
+
+/* ── Gray section (placeholder blocks from Figma) ── */
+.gray-block { background: var(--concrete); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
+}
